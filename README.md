@@ -11,10 +11,26 @@
 
 **job.go**: mysql请求的main入口
 
+## 启动项目前操作
+`go mod tidy`
 
 ### gin请求演示方式
+`
+默认开启localhost:8080端口
+`
 
+`在项目根目录执行  go run main.go`
 
 
 
 ### mysql写数据演示方式
+`需要根据自己mysql情况，先配置mysql，在jobtest/db/db_init.go当中`
+
+`需要注意库与表的建立`
+
+`create table if not exists testjob ( id INT UNSIGNED , v INT UNSIGNED);`
+
+`insert into testjob (id, v) values (100, 1);`
+
+`启动测试main程序 go run job.go，默认启动两个goroutine同时写表中的值。`
+
