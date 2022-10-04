@@ -1,8 +1,36 @@
 # golang 基于redis实现简单分布式锁
 ## 本项目采用golang语言操作redis，实现简单分布式锁。
 ## 其中采用两种演示方式：1.gin请求 2.mysql写数据
-
+### 项目依赖
+目前项目依赖Redis组件，需要先使用docker启动redis，并监听6379端口。
+未来会支持ini文件配置，让使用者配置更便捷
+```
+拉取镜像
+1. $ docker pull redis:latest
+执行镜像
+2. $ docker run -itd --name redis-test -p 6379:6379 redis
+进入docker中测试镜像功能
+3. $ docker exec -it redis-test /bin/bash
+```
 ### 项目目录
+```bigquery
+.
+├── README.md
+├── go.mod
+├── go.sum
+├── job.go
+├── jobtest
+│   ├── db
+│   │   ├── config.go
+│   │   ├── config.ini
+│   │   └── db_init.go
+│   └── myjob.go
+├── main.go
+└── src
+    ├── locker.go
+    └── redisinit.go
+
+```
 **src**:放置redis锁实现的主要方法
 
 **jobtest**: 放置连接mysql配置与执行操作的方法
