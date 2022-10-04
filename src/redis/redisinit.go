@@ -1,4 +1,4 @@
-package src
+package redis
 
 import (
 	"context"
@@ -9,12 +9,14 @@ import (
 	"time"
 )
 
-var redisClient *redis.Client
+//var redisClient *redis.Client
 var redisClient_Once sync.Once
+
+// TODO: 更新redis配置，支持ini文件的配置功能
 
 func Redis() *redis.Client  {
 	redisClient_Once.Do(func() {
-		redisClient= redis.NewClient(&redis.Options{
+		RedisClient = redis.NewClient(&redis.Options{
 			Network:  "tcp",
 			Addr:     "127.0.0.1:6379",
 			Password: "",                     //密码
@@ -40,13 +42,13 @@ func Redis() *redis.Client  {
 			MaxRetryBackoff: 512 * time.Millisecond, //每次计算重试间隔时间的上限，默认512毫秒，-1表示取消间隔
 
 		})
-		pong, err := redisClient.Ping(context.Background()).Result()
+		pong, err := RedisClient.Ping(context.Background()).Result()
 		if err!=nil{
 			log.Fatal(fmt.Errorf("connect error:%s",err))
 		}
 		log.Println(pong)
 	})
-	return redisClient
+	return RedisClient
 }
 func init() {
 	Redis()
