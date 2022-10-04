@@ -1,4 +1,5 @@
 # golang 基于redis实现简单分布式锁
+![](https://github.com/googs1025/golang-lock-by-redis/blob/main/image/%E6%B5%81%E7%A8%8B%E5%9B%BE%20(1).jpg?ram=true)
 ## 本项目采用golang语言操作redis，实现简单分布式锁。
 ## 其中采用两种演示方式：1.gin请求 2.mysql写数据
 ### 项目依赖
