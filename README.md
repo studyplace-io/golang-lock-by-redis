@@ -4,7 +4,7 @@
 ## 其中采用两种演示方式：1.gin请求 2.mysql写数据
 ### 项目依赖
 目前项目依赖Redis组件，需要先使用docker启动redis，并监听6379端口。
-未来会支持ini文件配置，让使用者配置更便捷
+已支持ini文件配置，让使用者配置更便捷，配置文件位于 **src/redis/redis_config.ini**
 ```
 拉取镜像
 1. $ docker pull redis:latest
@@ -29,7 +29,7 @@
 ├── main.go
 └── src
     ├── locker.go
-    └── redisinit.go
+    └── redisinit.go    // 更改为与配置文件合并
 
 ```
 **src**:放置redis锁实现的主要方法
