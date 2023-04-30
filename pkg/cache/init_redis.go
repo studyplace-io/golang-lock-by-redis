@@ -1,4 +1,4 @@
-package redis
+package cache
 
 import (
 	"context"
@@ -9,18 +9,18 @@ import (
 	"time"
 )
 
-//var redisClient *redis.Client
-var redisClient_Once sync.Once
+//var redisClient *cache.Client
+var redisClientOnce sync.Once
 
 // TODO: 更新redis配置，支持ini文件的配置功能
 
-func Redis() *redis.Client  {
-	redisClient_Once.Do(func() {
+func Redis() *redis.Client {
+	redisClientOnce.Do(func() {
 		RedisClient = redis.NewClient(&redis.Options{
 			Network:  "tcp",
 			Addr:     "127.0.0.1:6379",
-			Password: "",                     //密码
-			DB:       0,              // redis数据库
+			Password: "", //密码
+			DB:       0,  // redis数据库
 
 			//连接池容量及闲置连接数量
 			PoolSize:     15, // 连接池数量
@@ -43,8 +43,8 @@ func Redis() *redis.Client  {
 
 		})
 		pong, err := RedisClient.Ping(context.Background()).Result()
-		if err!=nil{
-			log.Fatal(fmt.Errorf("connect error:%s",err))
+		if err != nil {
+			log.Fatal(fmt.Errorf("connect error:%s", err))
 		}
 		log.Println(pong)
 	})
@@ -53,6 +53,3 @@ func Redis() *redis.Client  {
 func init() {
 	Redis()
 }
-
-
-

@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"redis-practice/src"
+	"redis-practice/pkg"
 	"strconv"
 	"time"
 )
@@ -12,10 +12,11 @@ const TTL = time.Second * 10
 func main() {
 	r := gin.New()
 
+	// 使用中间件
 	r.Use(func(c *gin.Context) {
 		defer func() {
 			if e := recover(); e != nil {
-				c.AbortWithStatusJSON(400, gin.H{"message:":e})
+				c.AbortWithStatusJSON(400, gin.H{"message:": e})
 			}
 		}()
 		c.Next()
@@ -23,9 +24,10 @@ func main() {
 
 	r.GET("/", func(c *gin.Context) {
 		a := 1
-		//lock := src.NewLocker("tryLock1111")
+		// lock := pkg.NewLocker("tryLock1111")
+
 		// 自定义过期时间，可能会发生一个情况，就是TTL设置3妙，但是请求需要5秒的情况，所以需要自动续期的功能。
-		lock := src.NewLockerWithTTL("trylock1111", TTL)
+		lock := pkg.NewLockerWithTTL("trylock1111", TTL)
 		lock.Lock()
 		defer lock.UnLock()
 		if c.Query("t") != "" {
@@ -38,7 +40,7 @@ func main() {
 			// 如果不设置过期时间，服务当机后，会迟迟无法释放锁，导致之后重启时，也不能正常运行。
 		}
 		a++
-		c.JSON(200, gin.H{"message:":"ok"+ strconv.Itoa(a)})
+		c.JSON(200, gin.H{"message:": "ok" + strconv.Itoa(a)})
 	})
 
 	defer func() {

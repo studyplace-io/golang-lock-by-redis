@@ -1,4 +1,4 @@
-package redis
+package cache
 
 import (
 	"context"
@@ -13,13 +13,10 @@ import (
 //RedisClient Redis缓存客户端单例
 var (
 	RedisClient *redis.Client
-	RedisAddr  			string
-	RedisPw    			string
-	RedisDbName    		string
+	RedisAddr   string
+	RedisPw     string
+	RedisDbName string
 )
-
-
-
 
 func init() {
 	// 取得配置文件路径
@@ -34,7 +31,7 @@ func init() {
 	RedisInit()
 }
 
-//初始化redis链接
+// RedisInit 初始化redis
 func RedisInit() {
 	db, _ := strconv.ParseUint(RedisDbName, 10, 64)
 	client := redis.NewClient(&redis.Options{
@@ -50,7 +47,7 @@ func RedisInit() {
 }
 
 func LoadRedis(file *ini.File) {
-	RedisAddr = file.Section("redis").Key("RedisAddr").String()
-	RedisPw = file.Section("redis").Key("RedisPw").String()
-	RedisDbName = file.Section("redis").Key("RedisDbName").String()
+	RedisAddr = file.Section("cache").Key("RedisAddr").String()
+	RedisPw = file.Section("cache").Key("RedisPw").String()
+	RedisDbName = file.Section("cache").Key("RedisDbName").String()
 }

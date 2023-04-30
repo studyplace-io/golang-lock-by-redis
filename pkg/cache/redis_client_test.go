@@ -1,4 +1,4 @@
-package redis
+package cache
 
 import (
 	"context"
@@ -8,16 +8,16 @@ import (
 )
 
 func TestRedis(t *testing.T) {
-	Convey("test redis client", t, func() {
+	Convey("test cache client", t, func() {
 		ctx := context.Background()
 		pong, err := RedisClient.Ping(ctx).Result()
 		fmt.Println(pong, err)
-		So(err,ShouldBeNil)
+		So(err, ShouldBeNil)
 	})
 }
 
 func TestRedisSet(t *testing.T) {
-	Convey("test redis set get", t, func() {
+	Convey("test cache set get", t, func() {
 		ctx := context.Background()
 		err := RedisClient.Set(ctx, "key", "value", 0).Err()
 		if err != nil {
@@ -32,7 +32,7 @@ func TestRedisSet(t *testing.T) {
 		So(err, ShouldBeNil)
 
 		//val2, err := RedisClient.Get(ctx, "missing_key").Result()
-		//if err == redis.Nil {
+		//if err == cache.Nil {
 		//	fmt.Println("missing_key does not exist")
 		//} else if err != nil {
 		//	panic(err)
