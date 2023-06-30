@@ -3,15 +3,16 @@ package pkg
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"log"
-	redis2 "redis-practice/pkg/cache"
 	"time"
+
+	"github.com/go-redis/redis/v8"
+	redis2 "redis-practice/pkg/cache"
 )
 
 // Locker 锁对象
 type Locker struct {
-	key        string
+	key string
 	// 过期时间
 	expiration time.Duration
 	unlock     bool
@@ -87,22 +88,7 @@ func (l *Locker) expandLockTime() {
 				break
 			}
 			l.resetExpiration()
-
 		}
 	}()
 
 }
-
-/*
-// 只用函数，不好对外封装，需要改成对象+构造函数+方法。
-func Lock(key string) {
-
-	ctx := context.Background()
-	boolRes := redisClient.SetNX(ctx, key, "1", 0)
-	if ok, err := boolRes.Result(); err != nil ||  !ok {
-		panic(fmt.Sprintf("lock error with key: %s", key))
-	}
-
-}
-
-*/

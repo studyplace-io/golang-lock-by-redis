@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-//RedisClient Redis缓存客户端单例
+// RedisClient Redis缓存客户端单例
 var (
 	RedisClient *redis.Client
 	RedisAddr   string
