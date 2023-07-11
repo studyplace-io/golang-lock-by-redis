@@ -3,25 +3,32 @@ package cache
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
+	"io/ioutil"
 	"log"
+	"os"
+	"strings"
 	"sync"
 	"time"
+
+	"github.com/go-redis/redis/v8"
+	"github.com/go-yaml/yaml"
 )
 
-//var redisClient *cache.Client
-var redisClientOnce sync.Once
+// RedisClient Redis缓存客户端单例
+var (
+	RedisClient     *redis.Client
+	redisClientOnce sync.Once
+)
 
 // TODO: 更新redis配置，支持ini文件的配置功能
 
-func Redis() *redis.Client {
+func Redis(config *RedisConfig) *redis.Client {
 	redisClientOnce.Do(func() {
 		RedisClient = redis.NewClient(&redis.Options{
 			Network:  "tcp",
-			Addr:     "127.0.0.1:6379",
-			Password: "", //密码
-			DB:       0,  // redis数据库
-
+			Addr:     config.Addr,
+			Password: config.Password, //密码
+			DB:       config.Db,       // redis数据库
 			//连接池容量及闲置连接数量
 			PoolSize:     15, // 连接池数量
 			MinIdleConns: 10, //好比最小连接数
@@ -51,5 +58,50 @@ func Redis() *redis.Client {
 	return RedisClient
 }
 func init() {
-	Redis()
+	// 取得配置文件路径
+	workdir, _ := os.Getwd()
+	var str = []string{workdir, "/redis_config.yaml"}
+	path := strings.Join(str, "")
+	r, err := loadConfig(path)
+	if err != nil {
+		fmt.Println("err", err)
+		return
+	}
+
+	Redis(r)
+}
+
+type RedisConfig struct {
+	Name     string `json:"name"`
+	Addr     string `json:"addr"`
+	Password string `json:"password"`
+	Db       int    `json:"db"`
+}
+
+func NewRedisConfig() *RedisConfig {
+	return &RedisConfig{}
+}
+
+func loadConfigFile(path string) []byte {
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		fmt.Printf("load file err: %s\n", err)
+		return nil
+	}
+	return b
+}
+
+// LoadConfig 读取配置文件
+func loadConfig(path string) (*RedisConfig, error) {
+	c := NewRedisConfig()
+	if b := loadConfigFile(path); b != nil {
+		err := yaml.Unmarshal(b, &c)
+		if err != nil {
+			fmt.Printf("unmarshal err: %s\n", err)
+			return nil, err
+		}
+		return c, err
+	} else {
+		return nil, fmt.Errorf("load config file error")
+	}
 }

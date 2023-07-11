@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v8"
-	redis2 "redis-practice/pkg/cache"
+	redis2 "github.com/practice/redis-practice/pkg/cache"
 )
 
 // Locker 锁对象

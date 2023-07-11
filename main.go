@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"redis-practice/pkg"
+	"github.com/practice/redis-practice/pkg"
 	"strconv"
 	"time"
 )
 
-const TTL = time.Second * 10
+const defaultTTL = time.Second * 10
 
 func main() {
 	r := gin.New()
@@ -27,7 +27,7 @@ func main() {
 		// lock := pkg.NewLocker("tryLock1111")
 
 		// 自定义过期时间，可能会发生一个情况，就是TTL设置3妙，但是请求需要5秒的情况，所以需要自动续期的功能。
-		lock := pkg.NewLockerWithTTL("trylock1111", TTL)
+		lock := pkg.NewLockerWithTTL("trylock1111", defaultTTL)
 		lock.Lock()
 		defer lock.UnLock()
 		if c.Query("t") != "" {

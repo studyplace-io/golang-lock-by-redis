@@ -2,11 +2,12 @@ package jobtest
 
 import (
 	"fmt"
-	"github.com/robfig/cron/v3"
 	"log"
-	db2 "redis-practice/jobtest/db"
-	"redis-practice/pkg"
 	"time"
+
+	db2 "github.com/practice/redis-practice/jobtest/db"
+	"github.com/practice/redis-practice/pkg"
+	"github.com/robfig/cron/v3"
 )
 
 func Run() {

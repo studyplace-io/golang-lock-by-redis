@@ -1,10 +1,11 @@
-module redis-practice
+module github.com/practice/redis-practice
 
 go 1.18
 
 require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-redis/redis/v8 v8.11.5
+	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/smartystreets/goconvey v1.7.2
 	gopkg.in/ini.v1 v1.67.0
